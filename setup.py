@@ -5,7 +5,7 @@ VERSION="0.0.1"
 
 # Setting up
 setup(
-    name="mukeshapi",
+    name="MukeshAPI",
     version=VERSION,
     author="Mukesh | noob-mukesh",
     author_email="<mail@itzcodermukesh@gamil.com>",
@@ -14,7 +14,7 @@ setup(
     long_description=long_desc,
     packages=find_packages(),
     install_requires=["pytz>=2023.3"],
-    keywords=['python', "mukesh-api","flask"],
+    keywords=['python', "MukeshAPI","flask"],
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
@@ -37,7 +37,6 @@ setup(
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Topic :: Software Development :: Libraries :: Application Frameworks",
     ],
-    keywords="python api for telegram bot apihub telegram fastapi flask",
     project_urls={
         "Tracker": "https://github.com/noob-mukesh/API-HUB/issues",
         "Community": "https://t.me/MR_SUKKUN",
