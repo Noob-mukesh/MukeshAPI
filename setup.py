@@ -38,9 +38,9 @@ setup(
         "Topic :: Software Development :: Libraries :: Application Frameworks",
     ],
     project_urls={
-        "Tracker": "https://github.com/noob-mukesh/API-HUB/issues",
+        "Tracker": "https://github.com/noob-mukesh/MukeshAPI/issues",
         "Community": "https://t.me/MR_SUKKUN",
-        "Source": "https://github.com/noob-mukesh/API-HUB",
+        "Source": "https://github.com/noob-mukesh/MukeshAPI",
     },
     python_requires="~=3.7",
 )
