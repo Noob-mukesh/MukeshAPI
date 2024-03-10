@@ -4,8 +4,57 @@ import string
 import base64,json
 from bs4 import BeautifulSoup
 from requests_html import HTMLSession
-
+import urllib
 __version__ = "0.1"
+
+
+
+
+MORSE_CODE_DICT = {
+    "A": ".-",
+    "B": "-...",
+    "C": "-.-.",
+    "D": "-..",
+    "E": ".",
+    "F": "..-.",
+    "G": "--.",
+    "H": "....",
+    "I": "..",
+    "J": ".---",
+    "K": "-.-",
+    "L": ".-..",
+    "M": "--",
+    "N": "-.",
+    "O": "---",
+    "P": ".--.",
+    "Q": "--.-",
+    "R": ".-.",
+    "S": "...",
+    "T": "-",
+    "U": "..-",
+    "V": "...-",
+    "W": ".--",
+    "X": "-..-",
+    "Y": "-.--",
+    "Z": "--..",
+    "1": ".----",
+    "2": "..---",
+    "3": "...--",
+    "4": "....-",
+    "5": ".....",
+    "6": "-....",
+    "7": "--...",
+    "8": "---..",
+    "9": "----.",
+    "0": "-----",
+    ", ": "--..--",
+    ".": ".-.-.-",
+    "?": "..--..",
+    "/": "-..-.",
+    "-": "-....-",
+    "(": "-.--.",
+    ")": "-.--.-",
+}
 
 # __all__ = ["hastag_gen","bhagwatgita","chatbot","pass_gen","imdb"]
 __all__ = ["api"]
@@ -86,7 +135,7 @@ class MukeshAPI:
         response = requests.get(full_url).json()["reply"]
         return response
 
-    def bhagwatgita(self,chapter: int, shalok: int = 1) -> dict:
+    def bhagwatgita(self,chapter: int, shalok: int = 1) -> requests.Response:
         """
         Retrieve a verse from the Bhagavad Gita based on the provided chapter and shalok number.
 
@@ -132,7 +181,8 @@ class MukeshAPI:
             actors, trailer link, and more.
 
         Example usage:
-        >>> movie_data = imdb("The Godfather")
+        >>> api = API()
+        >>> movie_data = api.imdb("The Godfather")
         >>> print(movie_data)
         """
 
@@ -202,4 +252,189 @@ class MukeshAPI:
                     return {"results": output}
                 except:
                     return {"Success": False}
+    def morse_encode(self,args:str)->str:
+        """
+    Encode the input string into Morse code.
+
+    Args:
+        args (str): The input string to be encoded into Morse code. ✨
+
+    Returns:
+        str: The Morse code representation of the input string along with additional information. 🔠
+
+    Example usage:
+    >>> api = API()
+    >>> encoded_result = api.morse_encode("Hello World")
+    >>> print(encoded_result)
+    """
+
+        cipher = ""
+        for letter in args.upper():
+            if letter != " ":
+                cipher += MORSE_CODE_DICT[letter] + " "
+            else:
+                cipher += " "
+        output = {
+            "input": args,
+            "results": cipher,
+            "join": "@Mr_Sukkun",
+            "sucess": True
+        }
+        return (output)
+    
+    def morse_decode(self,args: str) -> str:
+        """
+    Decode the Morse code back into the original text. 🔄
+
+    Args:
+        args (str): The Morse code to be decoded back into text.
+
+    Returns:
+        str: The decoded text from the Morse code.
+
+    Example usage:
+    >>> api = API()
+    >>> decoded_result =api.morse_decode(".... . .-.. .-.. --- / .-- --- .-. .-.. -..")
+    >>> print(decoded_result)
+    """
+
+        args += " "
+        decipher = ""
+        citext = ""
+        for letter in args:
+            if letter != " ":
+                i = 0
+                citext += letter
+            else:
+                i += 1
+                if i == 2:
+                    decipher += " "
+                else:
+                    decipher += list(MORSE_CODE_DICT.keys())[list(MORSE_CODE_DICT.values()).index(citext)]
+                    citext = ""
+        output = {
+            "input": args,
+            "results": decipher,
+            "join": "@Mr_Sukkun",
+            "success": True
+        }
+        return output
+    def gemini(self, args: str) -> dict:
+        """
+    Generate content using the Gemini API. ✨
+
+    Args:
+        args (str): The input text to generate content.
+
+    Returns:
+        dict: A dictionary containing the generated content with metadata.
+
+    Example usage:
+    >>> api = API()
+    >>> generated_content = api.gemini("Hello, how are you?")
+    >>> print(generated_content)
+    {
+        "results": "Generated content text",
+        "join": "@Mr_Sukkun",
+        "success": True
+    }
+    """
+        url = base64.b64decode('aHR0cHM6Ly9nZW5lcmF0aXZlbGFuZ3VhZ2UuZ29vZ2xlYXBpcy5jb20vdjFiZXRhL21vZGVscy9nZW1pbmktcHJvOmdlbmVyYXRlQ29udGVudD9rZXk9QUl6YVN5QlFhb1VGLUtXalBWXzRBQnRTTjBEUTBSUGtOZUNoNHRN').decode("utf-8")
+        headers = {'Content-Type': 'application/json'}
+        payload = {
+            'contents': [
+                {'parts': [{'text': args}]}
+            ]
+        }
+
+        response = requests.post(url, headers=headers, data=json.dumps(payload))
+        generated_text = response.json()["candidates"][0]["content"]["parts"][0]["text"]
+
+        return {"results": generated_text, "join": "@Mr_Sukkun", "success": True}
+    
+    def blackbox(self,args: str) -> requests.Response:
+        """
+        Interact with the Blackbox AI API for generating content. 🧠
+
+        Args:
+            args (str): The input text to interact with the Blackbox AI chat API.
+
+        Returns:
+            requests.Response: The response object from the API request.
+
+        Example usage:
+        >>> api = API()
+        >>> response = api.blackbox("Hello, how are you?")
+        >>> print(response.text)
+        {
+            "response": "Generated content response",
+            "status": 200
+        }
+        """
+
+        url = 'https://www.blackbox.ai/api/chat'
+        
+        payload = {
+            "agentMode": {},
+            "codeModelMode": True,
+            "id": "XM7KpOE",
+            "isMicMode": False,
+            "maxTokens": None,
+            "messages": [
+                {
+                    "id": "XM7KpOE",
+                    "content": urllib.parse.unquote(args),
+                    "role": "user"
+                }
+            ],
+            "previewToken": None,
+            "trendingAgentMode": {},
+            "userId": "87cdaa48-cdad-4dda-bef5-6087d6fc72f6",
+            "userSystemPrompt": None
+        }
+
+        headers = {
+            'Content-Type': 'application/json',
+            'Cookie': 'sessionId=f77a91e1-cbe1-47d0-b138-c2e23eeb5dcf; intercom-id-jlmqxicb=4cf07dd8-742e-4e3f-81de-38669816d300; intercom-device-id-jlmqxicb=1eafaacb-f18d-402a-8255-b763cf390df6; intercom-session-jlmqxicb=',
+            'Origin': 'https://www.blackbox.ai',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36'
+        }
+
+        response = requests.post(url, json=payload, headers=headers)
+
+        return response.text
+    
+    def unsplash_img(self,args)->requests.Response:
+        """
+    Get image URLs related to the query using the iStockphoto API.
+
+    Args:
+        args (str): The search query for images.
+
+    Returns:
+        list: List of image URLs related to the query.
+        
+    Example usage:
+    >>> api = API()
+    >>> response = api.unsplash_img("boy image")
+    >>> print(response)
+    
+
+    """
+
+
+        url = f'https://www.istockphoto.com/search/2/image?alloweduse=availableforalluses&phrase={args}&sort=best'
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+            'Accept-Language': 'en-US,en;q=0.9',
+            'Referer': 'https://unsplash.com/'}
+        response = requests.get(url, headers=headers)
+        soup = BeautifulSoup(response.content, 'html.parser')
+        image_tags = soup.find_all('img')
+        image_urls = [img['src'] for img in image_tags if img['src'].startswith('https://media.istockphoto.com')]
+        return image_urls
+    
+
+  
+
 api=MukeshAPI()
