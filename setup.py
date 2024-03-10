@@ -1,12 +1,22 @@
 from setuptools import setup,find_packages
+import re
+def get_version():
+    filename = "MukeshAPI/__init__.py"
+    with open(filename) as f:
+        match = re.search(r"""^__version__ = ['"]([^'"]*)['"]""", f.read(), re.M)
+    if not match:
+        raise RuntimeError("{} doesn't contain __version__".format(filename))
+    version = match.groups()[0]
+    return version
 with open("README.md", encoding="utf8") as readme:
     long_desc = readme.read()
-VERSION="0.5.3"
+    
+
 
 # Setting up
 setup(
     name="MukeshAPI",
-    version=VERSION,
+    version=get_version(),
     author="Mukesh | noob-mukesh",
     author_email="itzcodermukesh@gmail.com",
     description="python api hub |mukesh-api",
@@ -14,6 +24,8 @@ setup(
     long_description=long_desc,
     packages=find_packages(),
     license="MIT",
+    url="https://github.com/noob-mukesh/MukeshAPI",
+    
     install_requires=["pytz>=2023.3"],
     keywords=['python', "MukeshAPI","flask"],
     classifiers=[
