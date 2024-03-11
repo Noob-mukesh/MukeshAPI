@@ -5,7 +5,7 @@ import base64,json
 from bs4 import BeautifulSoup
 from requests_html import HTMLSession
 import urllib
-__version__ = "0.5.8.2.1"
+__version__ = "0.5.8.2.2"
 
 
 
