@@ -5,7 +5,7 @@ import base64,json
 from bs4 import BeautifulSoup
 from requests_html import HTMLSession
 import urllib
-__version__ = "0.1"
+__version__ = "0.5.8.2.1"
 
 
 
@@ -348,9 +348,11 @@ class MukeshAPI:
         }
 
         response = requests.post(url, headers=headers, data=json.dumps(payload))
-        generated_text = response.json()["candidates"][0]["content"]["parts"][0]["text"]
-
-        return {"results": generated_text, "join": "@Mr_Sukkun", "success": True}
+        if response.status_code == 200:
+            generated_text = response.json()["candidates"][0]["content"]["parts"][0]["text"]
+            return {"results": generated_text, "join": "@Mr_Sukkun", "success": True}
+        else:
+            return {f"status code: {response.status_code}"}
     
     def blackbox(self,args: str) -> requests.Response:
         """
@@ -401,8 +403,11 @@ class MukeshAPI:
         }
 
         response = requests.post(url, json=payload, headers=headers)
-
-        return response.text
+        if response.status_code == 200:
+            return {"results": response.text, "join": "@Mr_Sukkun", "success": True}
+        else:
+            return {f"status code: {response.status_code}"}
+       
     
     def unsplash_img(self,args)->requests.Response:
         """
@@ -429,10 +434,16 @@ class MukeshAPI:
             'Accept-Language': 'en-US,en;q=0.9',
             'Referer': 'https://unsplash.com/'}
         response = requests.get(url, headers=headers)
-        soup = BeautifulSoup(response.content, 'html.parser')
-        image_tags = soup.find_all('img')
-        image_urls = [img['src'] for img in image_tags if img['src'].startswith('https://media.istockphoto.com')]
-        return image_urls
+        if response.status_code == 200:
+            
+        
+            soup = BeautifulSoup(response.content, 'html.parser')
+            image_tags = soup.find_all('img')
+            image_urls = [img['src'] for img in image_tags if img['src'].startswith('https://media.istockphoto.com')]
+            
+            return {"results": image_urls, "join": "@Mr_Sukkun", "success": True}
+        else:
+            return {f"status code: {response.status_code}"}
     
 
   
