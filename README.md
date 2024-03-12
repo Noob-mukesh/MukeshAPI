@@ -15,8 +15,6 @@ print(api.chatbot("hii"))
 ```
 from MukeshAPI import api
 
-# Execute Chatgpt AI with the input text
-api = API()
 response = api.chatgpt("Write simple basic html website")
 print(response)
 ```
@@ -58,8 +56,6 @@ print(api.gemini("write flask app code"))
 ```
 from MukeshAPI import api
 
-# Execute datagpt AI with the input text
-api = API()
 response = api.datagpt("what is data science")
 print(response)
 ```
@@ -68,7 +64,7 @@ print(response)
 
 ```
 from MukeshAPI import api
-api = API()
+
 verse_data = api.get_gita_verse(1, 5)
 print(verse_data)
 ```
@@ -77,7 +73,7 @@ print(verse_data)
 
 ```
 from MukeshAPI import api
-api = API()
+
 movie_data = api.imdb("The Godfather")
 print(movie_data)
 ```
@@ -86,7 +82,7 @@ print(movie_data)
 
 ```
 from MukeshAPI import api
-api = API()
+
 decoded_result =api.morse_decode(".... . .-.. .-.. --- / .-- --- .-. .-.. -..")
 print(decoded_result)
 ```
@@ -95,7 +91,7 @@ print(decoded_result)
 
 ```
 from MukeshAPI import api
-api = API()
+
 encoded_result =api.morse_encode("enter text here")
 print(encoded_result)
 ```
@@ -104,7 +100,7 @@ print(encoded_result)
 
 ```
 from MukeshAPI import api
-api = API()
+
 keyword = "python"
 hashtags = api.hashtag(keyword)
 print(hashtags)
@@ -114,7 +110,7 @@ print(hashtags)
 
 ```
 from MukeshAPI import api
-api = API()
+
 response = api.unsplash("boy image")
 print(response)
 
@@ -124,7 +120,7 @@ print(response)
 
 ```
 from MukeshAPI import api
-api = API()
+
 user_data = api.leetcode("noob-mukesh")
 print(user_data)
 ```
@@ -133,7 +129,7 @@ print(user_data)
 
 ```
 from MukeshAPI import api
-api = API()
+
 user_data = api.pypi("mukeshapi")
 print(user_data)
 ```
