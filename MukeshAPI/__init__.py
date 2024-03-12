@@ -1,11 +1,11 @@
 import random
 import requests
-import string
+import string,re
 import base64,json
 from bs4 import BeautifulSoup
 from requests_html import HTMLSession
 import urllib
-__version__ = "0.5.8.2.2"
+__version__ = "0.5.9"
 
 
 
@@ -71,7 +71,7 @@ class MukeshAPI:
         
     
 
-    def pass_gen(self, num: int = 12)-> str:
+    def password(self, num: int = 12)-> str:
         """
         This function generates a random password by combining uppercase letters, lowercase letters, punctuation marks, and digits.
 
@@ -83,16 +83,16 @@ class MukeshAPI:
 
         Example usage:
         >>> api = API()
-        >>> api.pass_gen()
+        >>> api.password()
         'r$6Ag~P{32F+'
-        >>> api.pass_gen(10)
+        >>> api.password(10)
         'ZnK"9|?v3a'
         """
         characters = string.ascii_letters + string.punctuation + string.digits
         password = "".join(random.sample(characters, num))
         return password
 
-    def hashtag_gen(self, arg: str)-> list:
+    def hashtag(self, arg: str)-> list:
         """
         Generate hashtags based on the given keyword using a specific website.
         
@@ -105,7 +105,7 @@ class MukeshAPI:
         Example usage:
         >>> api = API()
         >>> keyword = "python"
-        >>> hashtags = api.hashtag_gen(keyword)
+        >>> hashtags = api.hashtag(keyword)
         >>> print(hashtags)
         """
         url = base64.b64decode("aHR0cHM6Ly9hbGwtaGFzaHRhZy5jb20vbGlicmFyeS9jb250ZW50cy9hamF4X2dlbmVyYXRvci5waHA=").decode("utf-8")
@@ -151,8 +151,8 @@ class MukeshAPI:
         >>> verse_data = api.get_gita_verse(1, 5)
         >>> print(verse_data)
         """
-
-        url = f"https://www.holy-bhagavad-gita.org/chapter/{chapter}/hi"
+        xc=base64.b64decode("aHR0cHM6Ly93d3cuaG9seS1iaGFnYXZhZC1naXRhLm9yZy9jaGFwdGVyLw==").decode(encoding="utf-8")
+        url = f"{xc}{chapter}/hi"
         response = requests.get(url)
         soup = BeautifulSoup(response.text, "html.parser")
         paragraph = soup.find("p")
@@ -347,12 +347,13 @@ class MukeshAPI:
             ]
         }
 
-        response = requests.post(url, headers=headers, data=json.dumps(payload))
-        if response.status_code == 200:
-            generated_text = response.json()["candidates"][0]["content"]["parts"][0]["text"]
-            return {"results": generated_text, "join": "@Mr_Sukkun", "success": True}
-        else:
-            return {f"status code: {response.status_code}"}
+        try:
+            response = requests.post(url, headers=headers, data=json.dumps(payload))
+            if response.status_code == 200:
+                generated_text = response.json()["candidates"][0]["content"]["parts"][0]["text"]
+                return generated_text
+        except Exception as e:
+            return e
     
     def blackbox(self,args: str) -> requests.Response:
         """
@@ -374,7 +375,7 @@ class MukeshAPI:
         }
         """
 
-        url = 'https://www.blackbox.ai/api/chat'
+        url = bas64.b64decode('aHR0cHM6Ly93d3cuYmxhY2tib3guYWkvYXBpL2NoYXQ=').decode("utf-8")
         
         payload = {
             "agentMode": {},
@@ -409,7 +410,7 @@ class MukeshAPI:
             return {f"status code: {response.status_code}"}
        
     
-    def unsplash_img(self,args)->requests.Response:
+    def unsplash(self,args)->requests.Response:
         """
     Get image URLs related to the query using the iStockphoto API.
 
@@ -421,13 +422,11 @@ class MukeshAPI:
         
     Example usage:
     >>> api = API()
-    >>> response = api.unsplash_img("boy image")
+    >>> response = api.unsplash("boy image")
     >>> print(response)
     
 
     """
-
-
         url = f'https://www.istockphoto.com/search/2/image?alloweduse=availableforalluses&phrase={args}&sort=best'
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
@@ -444,8 +443,198 @@ class MukeshAPI:
             return {"results": image_urls, "join": "@Mr_Sukkun", "success": True}
         else:
             return {f"status code: {response.status_code}"}
-    
+        
+    def leetcode(self,username):
+        """
+    Retrieve user data including activity streak, profile information, and contest badges from LeetCode using GraphQL API.
 
-  
+    Args:
+        username (str): The username of the LeetCode user.
+
+    Returns:
+        dict: A dictionary containing user data such as streak, total active days, badges, user profile information, and social media URLs.
+
+    Example usage:
+    >>> api = API()
+    >>> user_data = api.leetcode("noob-mukesh")
+    >>> print(user_data)"""
+        url = base64.b64decode('aHR0cHM6Ly9sZWV0Y29kZS5jb20vZ3JhcGhxbC8=').decode("utf-8")
+
+        payload = {
+        'operationName': 'userProfileCalendar',
+        'query': '''
+        query userProfileCalendar($username: String!, $year: Int) {
+        matchedUser(username: $username) {
+            userCalendar(year: $year) {
+            activeYears
+            streak
+            totalActiveDays
+            dccBadges {
+                timestamp
+                badge {
+                name
+                icon
+                }
+            }
+            submissionCalendar
+            }
+        }
+        }
+        ''',
+        'variables': {'username': username, 'year': 2024}
+    }
+
+        payload_2 = {
+        'operationName': 'userPublicProfile',
+        'query': '''
+        query userPublicProfile($username: String!) {
+        matchedUser(username: $username) {
+            contestBadge {
+            name
+            expired
+            hoverText
+            icon
+            }
+            username
+            githubUrl
+            twitterUrl
+            linkedinUrl
+            profile {
+            ranking
+            userAvatar
+            realName
+            aboutMe
+            school
+            websites
+            countryName
+            company
+            jobTitle
+            skillTags
+            postViewCount
+            postViewCountDiff
+            reputation
+            reputationDiff
+            solutionCount
+            solutionCountDiff
+            categoryDiscussCount
+            categoryDiscussCountDiff
+            }
+        }
+        }
+        ''',
+        'variables': {'username': username}
+    }
+
+        try:
+            response = requests.post(url, json=payload)
+            data_1 = response.json()['data']['matchedUser']
+
+            response = requests.post(url, json=payload_2)
+            data_2 = response.json()['data']['matchedUser']
+
+            output_dict2 = {} 
+            output_dict2.update(data_1)
+            output_dict2.update(data_2)
+            output_dict = {}
+
+            for key, value in output_dict2.items():
+                if isinstance(value, dict):
+                    output_dict[key] = {}
+                    for k, v in value.items():
+                        output_dict[key][k] = v
+                else:
+                    output_dict[key] = value
+            return output_dict
+        except Exception as e:
+            return e
+        
+    def datagpt(self,args):
+        """
+        Sends a query to a specified datagpt API endpoint to retrieve a response based on the provided question.
+
+        Args:
+            args (str): The question or input for the datagpt.
+
+        Returns:
+            str: The response text from the datagpt API.
+
+        Example usage:
+        >>> api = API()
+        >>> response = api.datagpt("What are the latest trends in AI?")
+        >>> print(response)
+        """
+        url = base64.b64decode("aHR0cHM6Ly9hcHAuY3JlYXRvci5pby9hcGkvY2hhdA==").decode("utf-8")
+        payload = {
+            "question": args,
+            "chatbotId": "712544d1-0c95-459e-ba22-45bae8905bed",
+            "session_id": "8a790e7f-ec7a-4834-be4a-40a78dfb525f",
+            "site": "datacareerjumpstart.mykajabi.com"
+        }
+
+        response = requests.post(url, json=payload)
+
+        extracted_text = re.findall(r"\{(.*?)\}", response.text, re.DOTALL)
+        extracted_json = "{" + extracted_text[0] + "}]}"
+        json_text = extracted_json.replace('\n', ' ')
+
+        data = json.loads(json_text)
+        return data["text"]
+    def pypi(self,args):
+        """
+    Retrieve package information from the Python Package Index (PyPI) by providing the package name.
+
+    Args:
+        args (str): The name of the package to search for on PyPI.
+
+    Returns:
+        dict: A dictionary containing information about the specified package, such as name, version, description, author, license, and more.
+
+    Example usage:
+    >>> api = API()
+    >>> package_info = api.pypi("requests")
+    >>> print(package_info)
+    """
+   
+        n = base64.b64decode("aHR0cHM6Ly9weXBpLm9yZy9weXBpLw==").decode("utf-8")
+        result = requests.get(f"{n}{args}/json").json()["info"]
+        return result
+    
+    def chatgpt(self,args):
+        """
+        Sends a query to a specified chatgpt API endpoint to retrieve a response based on the provided question.
+
+        Args:
+            args (str): The question or input for the chatgpt.
+
+        Returns:
+            str: The response text from the chatgpt API.
+
+        Example usage:
+        >>> api = API()
+        >>> response = api.chatgpt("What are the latest trends in AI?")
+        >>> print(response)
+        """
+        url = base64.b64decode("aHR0cHM6Ly9jaGF0Z3B0ZnJlZS5haS93cC1hZG1pbi9hZG1pbi1hamF4LnBocA==").decode("utf-8")
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 import requests'
+        }
+        payload = {
+            '_wpnonce': '6ec8dd3b74',
+            'url': base64.b64decode('aHR0cHM6Ly9jaGF0Z3B0ZnJlZS5haQ==').decode("utf-8"),
+            'action': 'wpaicg_chat_shortcode_message',
+            'message': args }
+        try:
+            response = requests.post(url, headers=headers, data=payload)
+            response_text = response.text
+            return json.loads(response_text)["data"]
+        except Exception as e:
+            return e
+
+        
+            
+
+
+        
 
 api=MukeshAPI()
+print(api.chatgpt("what is ai"))
