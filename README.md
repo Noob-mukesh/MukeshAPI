@@ -1,5 +1,26 @@
 # MukeshAPI 🚀
 
+## Chatgpt AI 🤖
+
+```
+from MukeshAPI import api
+
+# Execute Chatgpt AI with the input text
+
+response = api.chatgpt("Write simple basic html website")
+
+print(response)
+
+# Execute Chatgpt AI with the input text with modes features
+
+# available modes are "girlfriend","anime","animev2","flirt","santa","elonmusk"
+
+response = api.chatgpt("hi babe","girlfriend")
+
+print(response)
+
+```
+
 ## Chatbot AI 🤖
 
 ```
@@ -8,17 +29,6 @@ from MukeshAPI import api
 # Execute Chatbot AI with the input text
 
 print(api.chatbot("hii"))
-```
-
-## Chatgpt AI 🤖
-
-```
-from MukeshAPI import api
-
-# Execute Chatgpt AI with the input text
-api = API()
-response = api.chatgpt("Write simple basic html website")
-print(response)
 ```
 
 ## Blackbox AI 🤖
@@ -59,7 +69,6 @@ print(api.gemini("write flask app code"))
 from MukeshAPI import api
 
 # Execute datagpt AI with the input text
-api = API()
 response = api.datagpt("what is data science")
 print(response)
 ```
@@ -68,8 +77,7 @@ print(response)
 
 ```
 from MukeshAPI import api
-api = API()
-verse_data = api.get_gita_verse(1, 5)
+verse_data = api.bhagwatgita(1, 5)
 print(verse_data)
 ```
 
@@ -77,8 +85,10 @@ print(verse_data)
 
 ```
 from MukeshAPI import api
-api = API()
+
+
 movie_data = api.imdb("The Godfather")
+
 print(movie_data)
 ```
 
@@ -86,8 +96,9 @@ print(movie_data)
 
 ```
 from MukeshAPI import api
-api = API()
+
 decoded_result =api.morse_decode(".... . .-.. .-.. --- / .-- --- .-. .-.. -..")
+
 print(decoded_result)
 ```
 
@@ -95,7 +106,6 @@ print(decoded_result)
 
 ```
 from MukeshAPI import api
-api = API()
 encoded_result =api.morse_encode("enter text here")
 print(encoded_result)
 ```
@@ -104,7 +114,6 @@ print(encoded_result)
 
 ```
 from MukeshAPI import api
-api = API()
 keyword = "python"
 hashtags = api.hashtag(keyword)
 print(hashtags)
@@ -114,7 +123,6 @@ print(hashtags)
 
 ```
 from MukeshAPI import api
-api = API()
 response = api.unsplash("boy image")
 print(response)
 
@@ -124,7 +132,7 @@ print(response)
 
 ```
 from MukeshAPI import api
-api = API()
+
 user_data = api.leetcode("noob-mukesh")
 print(user_data)
 ```
@@ -133,9 +141,32 @@ print(user_data)
 
 ```
 from MukeshAPI import api
-api = API()
 user_data = api.pypi("mukeshapi")
 print(user_data)
+```
+
+## Github Profile Information
+
+```
+from MukeshAPI import api
+search_results = api.github("noob-mukesh")
+print(search_results)
+```
+
+## Github Repo Search
+
+```
+from MukeshAPI import api
+search_results = api.repo("mukeshrobot")
+print(search_results)
+```
+
+## Random Meme
+
+```
+from MukeshAPI import api
+search_results = api.meme()
+print(search_results)
 ```
 
 Please note that you need to install `MukeshAPI` using pip by running `pip install --upgrade MukeshAPI` in your terminal before executing these codes.
@@ -162,6 +193,9 @@ Please note that you need to install `MukeshAPI` using pip by running `pip insta
 10. <b>pypi(args) </b>- Search PyPI for packages
 11. <b>datagpt(args) </b>- Generates data using Datasets from datagpt ai
 12. <b>unsplash(args) </b>- search hd image from unsplash website
+13. <b>github(args) </b> - Extract github information by username
+14. <b>repo(args) </b> - Extract github repo by name
+15. <b> Meme</b> - Generate memes
 
 <b>🔗 Have fun coding with MukeshAPI! </b>
 

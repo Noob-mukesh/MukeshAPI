@@ -5,72 +5,23 @@ import base64,json
 from bs4 import BeautifulSoup
 from requests_html import HTMLSession
 import urllib
-__version__ = "0.5.9"
+from .func import MORSE_CODE_DICT
 
+__version__ = "0.6.2"
 
+__all__ = ["api","AI"]
 
-
-MORSE_CODE_DICT = {
-    "A": ".-",
-    "B": "-...",
-    "C": "-.-.",
-    "D": "-..",
-    "E": ".",
-    "F": "..-.",
-    "G": "--.",
-    "H": "....",
-    "I": "..",
-    "J": ".---",
-    "K": "-.-",
-    "L": ".-..",
-    "M": "--",
-    "N": "-.",
-    "O": "---",
-    "P": ".--.",
-    "Q": "--.-",
-    "R": ".-.",
-    "S": "...",
-    "T": "-",
-    "U": "..-",
-    "V": "...-",
-    "W": ".--",
-    "X": "-..-",
-    "Y": "-.--",
-    "Z": "--..",
-    "1": ".----",
-    "2": "..---",
-    "3": "...--",
-    "4": "....-",
-    "5": ".....",
-    "6": "-....",
-    "7": "--...",
-    "8": "---..",
-    "9": "----.",
-    "0": "-----",
-    ", ": "--..--",
-    ".": ".-.-.-",
-    "?": "..--..",
-    "/": "-..-.",
-    "-": "-....-",
-    "(": "-.--.",
-    ")": "-.--.-",
-}
-
-# __all__ = ["hastag_gen","bhagwatgita","chatbot","pass_gen","imdb"]
-__all__ = ["api"]
 
 class MukeshAPI:
-    """Api for various purpose
+    
+    def __init__(self)->None:
+        """Api for various purpose
     support group : https://t.me/the_support_chat
     owner : @mr_sukkun
-    """
-    def __init__(self)->None:
         """
-        Purpose: value
-        """
-        
+        pass
     
-
+               
     def password(self, num: int = 12)-> str:
         """
         This function generates a random password by combining uppercase letters, lowercase letters, punctuation marks, and digits.
@@ -148,7 +99,7 @@ class MukeshAPI:
 
         Example usage:
         >>> api = API()
-        >>> verse_data = api.get_gita_verse(1, 5)
+        >>> verse_data = api.bhagwatgita(1, 5)
         >>> print(verse_data)
         """
         xc=base64.b64decode("aHR0cHM6Ly93d3cuaG9seS1iaGFnYXZhZC1naXRhLm9yZy9jaGFwdGVyLw==").decode(encoding="utf-8")
@@ -319,95 +270,6 @@ class MukeshAPI:
             "success": True
         }
         return output
-    def gemini(self, args: str) -> dict:
-        """
-    Generate content using the Gemini API. ✨
-
-    Args:
-        args (str): The input text to generate content.
-
-    Returns:
-        dict: A dictionary containing the generated content with metadata.
-
-    Example usage:
-    >>> api = API()
-    >>> generated_content = api.gemini("Hello, how are you?")
-    >>> print(generated_content)
-    {
-        "results": "Generated content text",
-        "join": "@Mr_Sukkun",
-        "success": True
-    }
-    """
-        url = base64.b64decode('aHR0cHM6Ly9nZW5lcmF0aXZlbGFuZ3VhZ2UuZ29vZ2xlYXBpcy5jb20vdjFiZXRhL21vZGVscy9nZW1pbmktcHJvOmdlbmVyYXRlQ29udGVudD9rZXk9QUl6YVN5QlFhb1VGLUtXalBWXzRBQnRTTjBEUTBSUGtOZUNoNHRN').decode("utf-8")
-        headers = {'Content-Type': 'application/json'}
-        payload = {
-            'contents': [
-                {'parts': [{'text': args}]}
-            ]
-        }
-
-        try:
-            response = requests.post(url, headers=headers, data=json.dumps(payload))
-            if response.status_code == 200:
-                generated_text = response.json()["candidates"][0]["content"]["parts"][0]["text"]
-                return generated_text
-        except Exception as e:
-            return e
-    
-    def blackbox(self,args: str) -> requests.Response:
-        """
-        Interact with the Blackbox AI API for generating content. 🧠
-
-        Args:
-            args (str): The input text to interact with the Blackbox AI chat API.
-
-        Returns:
-            requests.Response: The response object from the API request.
-
-        Example usage:
-        >>> api = API()
-        >>> response = api.blackbox("Hello, how are you?")
-        >>> print(response.text)
-        {
-            "response": "Generated content response",
-            "status": 200
-        }
-        """
-
-        url = bas64.b64decode('aHR0cHM6Ly93d3cuYmxhY2tib3guYWkvYXBpL2NoYXQ=').decode("utf-8")
-        
-        payload = {
-            "agentMode": {},
-            "codeModelMode": True,
-            "id": "XM7KpOE",
-            "isMicMode": False,
-            "maxTokens": None,
-            "messages": [
-                {
-                    "id": "XM7KpOE",
-                    "content": urllib.parse.unquote(args),
-                    "role": "user"
-                }
-            ],
-            "previewToken": None,
-            "trendingAgentMode": {},
-            "userId": "87cdaa48-cdad-4dda-bef5-6087d6fc72f6",
-            "userSystemPrompt": None
-        }
-
-        headers = {
-            'Content-Type': 'application/json',
-            'Cookie': 'sessionId=f77a91e1-cbe1-47d0-b138-c2e23eeb5dcf; intercom-id-jlmqxicb=4cf07dd8-742e-4e3f-81de-38669816d300; intercom-device-id-jlmqxicb=1eafaacb-f18d-402a-8255-b763cf390df6; intercom-session-jlmqxicb=',
-            'Origin': 'https://www.blackbox.ai',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36'
-        }
-
-        response = requests.post(url, json=payload, headers=headers)
-        if response.status_code == 200:
-            return {"results": response.text, "join": "@Mr_Sukkun", "success": True}
-        else:
-            return {f"status code: {response.status_code}"}
        
     
     def unsplash(self,args)->requests.Response:
@@ -548,37 +410,7 @@ class MukeshAPI:
         except Exception as e:
             return e
         
-    def datagpt(self,args):
-        """
-        Sends a query to a specified datagpt API endpoint to retrieve a response based on the provided question.
-
-        Args:
-            args (str): The question or input for the datagpt.
-
-        Returns:
-            str: The response text from the datagpt API.
-
-        Example usage:
-        >>> api = API()
-        >>> response = api.datagpt("What are the latest trends in AI?")
-        >>> print(response)
-        """
-        url = base64.b64decode("aHR0cHM6Ly9hcHAuY3JlYXRvci5pby9hcGkvY2hhdA==").decode("utf-8")
-        payload = {
-            "question": args,
-            "chatbotId": "712544d1-0c95-459e-ba22-45bae8905bed",
-            "session_id": "8a790e7f-ec7a-4834-be4a-40a78dfb525f",
-            "site": "datacareerjumpstart.mykajabi.com"
-        }
-
-        response = requests.post(url, json=payload)
-
-        extracted_text = re.findall(r"\{(.*?)\}", response.text, re.DOTALL)
-        extracted_json = "{" + extracted_text[0] + "}]}"
-        json_text = extracted_json.replace('\n', ' ')
-
-        data = json.loads(json_text)
-        return data["text"]
+    
     def pypi(self,args):
         """
     Retrieve package information from the Python Package Index (PyPI) by providing the package name.
@@ -599,42 +431,101 @@ class MukeshAPI:
         result = requests.get(f"{n}{args}/json").json()["info"]
         return result
     
-    def chatgpt(self,args):
+    
+    def repo(self,args):
         """
-        Sends a query to a specified chatgpt API endpoint to retrieve a response based on the provided question.
+    Search GitHub repositories based on the search query provided.
 
-        Args:
-            args (str): The question or input for the chatgpt.
+    Args:
+        args (str): The search query to find repositories on GitHub.
 
+    Returns:
+        dict: A dictionary containing search results of GitHub repositories. Each entry includes an index and corresponding repository.
+
+    Example usage:
+    >>> api = API()
+    >>> search_results = api.repo("MukeshRobot")
+    >>> print(search_results)
+    """
+        
+        n = base64.b64decode("aHR0cHM6Ly9hcGkuZ2l0aHViLmNvbS9zZWFyY2gvcmVwb3NpdG9yaWVzP3E9"
+            ).decode("utf-8")
+        search_results = requests.get(f"{n}{args}").json()
+        items = search_results.get("items", [])
+        result = []
+        for index, item in enumerate(items, 1):
+            result.append((index, item))
+
+        return {"results": result, "join": "@Mr_Sukkun", "sucess": True}
+    def github(self,args):
+        """
+    Search GitHub information based on the username query provided.
+
+    Args:
+        args (str): The search query to find information of  GitHub User.
+
+    Returns:
+        dict: A dictionary containing search results of GitHub username .
+
+    Example usage:
+    >>> api = API()
+    >>> search_results = api.github("noob-mukesh")
+    >>> print(search_results)
+    """
+
+        n = base64.b64decode("aHR0cHM6Ly9hcGkuZ2l0aHViLmNvbS91c2Vycy8=").decode("utf-8")
+        result = requests.get(f"{n}{args}").json()
+        url = result["html_url"]
+        name = result["name"]
+        id = result["id"]
+        company = result["company"]
+        bio = result["bio"]
+        pattern = "[a-zA-Z]+"
+        created_at = result["created_at"]
+        created = re.sub(pattern, " ", created_at)
+        updated_at = result["updated_at"]
+        updated = re.sub(pattern, " ", updated_at)
+        avatar_url = f"https://avatars.githubusercontent.com/u/{id}"
+        blog = result["blog"]
+        location = result["location"]
+        repositories = result["public_repos"]
+        followers = result["followers"]
+        following = result["following"]
+        results = {
+            "url": url,
+            "name": name,
+            "id": id,
+            "company": company,
+            "bio": bio,
+            "created at": created,
+            "updated at": updated,
+            "Profile image": avatar_url,
+            "blog": blog,
+            "location": location,
+            "repos": repositories,
+            "followers": followers,
+            "following": following,
+        }
+        return results
+    def meme(self):
+        """ Fetch  random memes from reddit
+        
         Returns:
-            str: The response text from the chatgpt API.
-
+        
+        dict: A dictionary containing search results of meme
+        
         Example usage:
         >>> api = API()
-        >>> response = api.chatgpt("What are the latest trends in AI?")
-        >>> print(response)
+        >>> search_results = api.meme()
+        >>> print(search_results)
         """
-        url = base64.b64decode("aHR0cHM6Ly9jaGF0Z3B0ZnJlZS5haS93cC1hZG1pbi9hZG1pbi1hamF4LnBocA==").decode("utf-8")
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 import requests'
-        }
-        payload = {
-            '_wpnonce': '6ec8dd3b74',
-            'url': base64.b64decode('aHR0cHM6Ly9jaGF0Z3B0ZnJlZS5haQ==').decode("utf-8"),
-            'action': 'wpaicg_chat_shortcode_message',
-            'message': args }
-        try:
-            response = requests.post(url, headers=headers, data=payload)
-            response_text = response.text
-            return json.loads(response_text)["data"]
-        except Exception as e:
-            return e
 
-        
-            
-
-
-        
+        n = base64.b64decode("aHR0cHM6Ly9tZW1lLWFwaS5jb20vZ2ltbWU=").decode("utf-8")
+        res = requests.get(f"{n}").json()
+        title = res["title"]
+        url = res["url"]
+        results = {"title": title, "url": url}
+        return results
+    
 
 api=MukeshAPI()
-print(api.chatgpt("what is ai"))

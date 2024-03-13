@@ -1,6 +1,6 @@
 from setuptools import setup,find_packages
 import re
-def get_version():
+def version():
     filename = "MukeshAPI/__init__.py"
     with open(filename) as f:
         match = re.search(r"""^__version__ = ['"]([^'"]*)['"]""", f.read(), re.M)
@@ -16,7 +16,7 @@ with open("README.md", encoding="utf8") as readme:
 # Setting up
 setup(
     name="MukeshAPI",
-    version=get_version(),
+    version=version(),
     author="Mukesh | noob-mukesh",
     author_email="itzcodermukesh@gmail.com",
     description="python api hub |mukesh-api",
@@ -25,7 +25,7 @@ setup(
     packages=find_packages(),
     license="MIT",
     url="https://github.com/noob-mukesh/MukeshAPI",
-    
+    download_url="https://github.com/Noob-mukesh/MukeshAPI/blob/main/README.md",
     install_requires=["pytz>=2023.3","requests-html"],
     keywords=['python', "MukeshAPI","flask"],
     classifiers=[
