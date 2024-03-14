@@ -5,12 +5,12 @@ import base64,json
 from bs4 import BeautifulSoup
 from requests_html import HTMLSession
 import urllib
-from .func import MORSE_CODE_DICT
-from .import AI
+from .func import (MORSE_CODE_DICT,payloads_response,gpt_4_mode,payload8)
+from base64 import b64decode as m
 
-__version__ = "0.6.2.3"
+__version__ = "0.6.2.4"
 
-__all__ = ["api","AI"]
+__all__ = ["api"]
 
 
 class MukeshAPI:
@@ -22,7 +22,135 @@ class MukeshAPI:
         """
         pass
     
-               
+    def datagpt(self,args:str):
+        """
+        Sends a query to a specified datagpt API endpoint to retrieve a response based on the provided question.
+
+        Args:
+            args (str): The question or input for the datagpt.
+
+        Returns:
+            str: The response text from the datagpt API.
+
+        Example usage:
+        >>> from MukeshAPI import api
+        >>> response = api.datagpt("What are the latest trends in AI?")
+        >>> print(response)
+        """
+        url = m("aHR0cHM6Ly9hcHAuY3JlYXRvci5pby9hcGkvY2hhdA==").decode("utf-8")
+        payload = {
+            "question": args,
+            "chatbotId": "712544d1-0c95-459e-ba22-45bae8905bed",
+            "session_id": "8a790e7f-ec7a-4834-be4a-40a78dfb525f",
+            "site": "datacareerjumpstart.mykajabi.com"
+        }
+
+        try:
+            response = requests.post(url, json=payload)
+            extracted_text = re.findall(r"\{(.*?)\}", response.text, re.DOTALL)
+            extracted_json = "{" + extracted_text[0] + "}]}"
+            json_text = extracted_json.replace('\n', ' ')
+
+            data = json.loads(json_text)
+            return {"results":data["text"],"join": "@Mr_Sukkun", "success": True
+                    }
+        except Exception as e:
+            return e   
+    
+
+    def blackbox(self,args: str) -> requests.Response:
+        """
+        Interact with the Blackbox AI API for generating content. 🧠
+
+        Args:
+            args (str): The input text to interact with the Blackbox AI chat API.
+
+        Returns:
+            requests.Response: The response object from the API request.
+
+        Example usage:
+        >>> from MukeshAPI import api
+        >>> response = api.blackbox("Hello, how are you?")
+        >>> print(response.text)
+        {
+            "response": "Generated content response",
+            "status": 200
+        }
+        """
+
+        url = m('aHR0cHM6Ly93d3cuYmxhY2tib3guYWkvYXBpL2NoYXQ=').decode("utf-8")
+        
+        payload = {
+            "agentMode": {},
+            "codeModelMode": True,
+            "id": "XM7KpOE",
+            "isMicMode": False,
+            "maxTokens": None,
+            "messages": [
+                {
+                    "id": "XM7KpOE",
+                    "content": urllib.parse.unquote(args),
+                    "role": "user"
+                }
+            ],
+            "previewToken": None,
+            "trendingAgentMode": {},
+            "userId": "87cdaa48-cdad-4dda-bef5-6087d6fc72f6",
+            "userSystemPrompt": None
+        }
+
+        headers = {
+            'Content-Type': 'application/json',
+            'Cookie': 'sessionId=f77a91e1-cbe1-47d0-b138-c2e23eeb5dcf; intercom-id-jlmqxicb=4cf07dd8-742e-4e3f-81de-38669816d300; intercom-device-id-jlmqxicb=1eafaacb-f18d-402a-8255-b763cf390df6; intercom-session-jlmqxicb=',
+            'Origin': 'https://www.blackbox.ai',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36'
+        }
+        try:
+            response = requests.post(url, json=payload, headers=headers)
+            if response.status_code == 200:
+                return {"results": response.text, "join": "@Mr_Sukkun", "success": True}
+        except Exception as e:
+            return e  
+    def chatgpt(self,args:str,mode:str=False):
+       
+        """
+        Sends a query to a specified chatgpt API endpoint to retrieve a response based on the provided question.
+        
+
+        Args:
+            args (str): The question or input for the chatgpt.
+            mode(str) : this  parameter is used to select different models of Chatgpt
+                        available modes are "girlfriend","anime","animev2","flirt","santa","elonmusk"
+
+        Returns:
+            str: The response text from the chatgpt API.
+
+        Example usage:
+        >>> from MukeshAPI import api
+        >>> response = api.chatgpt("hi babe?",mode="girlfriend")
+        >>> print(response)
+        """
+        if not mode:
+            try:
+                session = requests.Session()
+                response_data=payloads_response(payloads=payload8,args=args)
+                url = "https://api.exh.ai/chatbot/v1/get_response"
+                headers = {
+                "Authorization": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6ImJvdGlmeS13ZWItdjMifQ.O-w89I5aX2OE_i4k6jdHZJEDWECSUfOb1lr9UdVH4oTPMkFGUNm9BNzoQjcXOu8NEiIXq64-481hnenHdUrXfg",
+                "Content-Type": "application/json",
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
+            }
+                response = session.post(url, headers=headers, data=json.dumps(response_data))
+                return {"results":response.json()["response"],"join": "@Mr_Sukkun", "success": True}
+            except Exception as e:
+                return e
+        else:
+            try:
+                result = gpt_4_mode(args, mode)
+                return {"results":result,"join": "@Mr_Sukkun", "success": True}
+                
+            except Exception as e:
+                return e      
     def password(self, num: int = 12)-> str:
         """
         This function generates a random password by combining uppercase letters, lowercase letters, punctuation marks, and digits.
@@ -34,7 +162,7 @@ class MukeshAPI:
         - str: A randomly generated password consisting of characters from string.ascii_letters, string.punctuation, and string.digits.
 
         Example usage:
-        >>> api = API()
+        >>> from MukeshAPI import api
         >>> api.password()
         'r$6Ag~P{32F+'
         >>> api.password(10)
@@ -43,6 +171,36 @@ class MukeshAPI:
         characters = string.ascii_letters + string.punctuation + string.digits
         password = "".join(random.sample(characters, num))
         return password
+    def gemini(self, args: str) -> dict:
+        """
+        Generate content using the Gemini API. ✨
+
+        Args:
+            args (str): The input text to generate content.
+
+        Returns:
+            dict: A dictionary containing the generated content with metadata.
+
+        Example usage:
+        >>> from MukeshAPI import api
+        >>> generated_content = api.gemini("Hello, how are you?")
+        >>> print(generated_content)
+        """
+        url = m('aHR0cHM6Ly9nZW5lcmF0aXZlbGFuZ3VhZ2UuZ29vZ2xlYXBpcy5jb20vdjFiZXRhL21vZGVscy9nZW1pbmktcHJvOmdlbmVyYXRlQ29udGVudD9rZXk9QUl6YVN5QlFhb1VGLUtXalBWXzRBQnRTTjBEUTBSUGtOZUNoNHRN').decode("utf-8")
+        headers = {'Content-Type': 'application/json'}
+        payload = {
+            'contents': [
+                {'parts': [{'text': args}]}
+            ]
+        }
+
+        try:
+            response = requests.post(url, headers=headers, data=json.dumps(payload))
+            if response.status_code == 200:
+                generated_text = response.json()["candidates"][0]["content"]["parts"][0]["text"]
+                return {"results":generated_text,"join": "@Mr_Sukkun", "success": True}
+        except Exception as e:
+            return e
 
     def hashtag(self, arg: str)-> list:
         """
@@ -55,7 +213,7 @@ class MukeshAPI:
         str: A string of hashtags related to the given keyword.
         
         Example usage:
-        >>> api = API()
+        >>> from MukeshAPI import api
         >>> keyword = "python"
         >>> hashtags = api.hashtag(keyword)
         >>> print(hashtags)
@@ -77,7 +235,7 @@ class MukeshAPI:
         str: The response from the chatbot based on the input text.
 
         Example usage:
-        >>> api = API()
+        >>> from MukeshAPI import api
         >>> user_input = "Hello, how are you?"
         >>> response = api.chatbot(user_input)
         >>> print(response)
@@ -99,7 +257,7 @@ class MukeshAPI:
         dict: A dictionary containing the chapter number, verse text, chapter introduction, and the specified shalok text.
 
         Example usage:
-        >>> api = API()
+        >>> from MukeshAPI import api
         >>> verse_data = api.bhagwatgita(1, 5)
         >>> print(verse_data)
         """
@@ -133,7 +291,7 @@ class MukeshAPI:
             actors, trailer link, and more.
 
         Example usage:
-        >>> api = API()
+        >>> from MukeshAPI import api
         >>> movie_data = api.imdb("The Godfather")
         >>> print(movie_data)
         """
@@ -215,7 +373,7 @@ class MukeshAPI:
         str: The Morse code representation of the input string along with additional information. 🔠
 
     Example usage:
-    >>> api = API()
+    >>> from MukeshAPI import api
     >>> encoded_result = api.morse_encode("Hello World")
     >>> print(encoded_result)
     """
@@ -245,7 +403,7 @@ class MukeshAPI:
         str: The decoded text from the Morse code.
 
     Example usage:
-    >>> api = API()
+    >>> from MukeshAPI import api
     >>> decoded_result =api.morse_decode(".... . .-.. .-.. --- / .-- --- .-. .-.. -..")
     >>> print(decoded_result)
     """
@@ -284,7 +442,7 @@ class MukeshAPI:
         list: List of image URLs related to the query.
         
     Example usage:
-    >>> api = API()
+    >>> from MukeshAPI import api
     >>> response = api.unsplash("boy image")
     >>> print(response)
     
@@ -318,7 +476,7 @@ class MukeshAPI:
         dict: A dictionary containing user data such as streak, total active days, badges, user profile information, and social media URLs.
 
     Example usage:
-    >>> api = API()
+    >>> from MukeshAPI import api
     >>> user_data = api.leetcode("noob-mukesh")
     >>> print(user_data)"""
         url = base64.b64decode('aHR0cHM6Ly9sZWV0Y29kZS5jb20vZ3JhcGhxbC8=').decode("utf-8")
@@ -423,7 +581,7 @@ class MukeshAPI:
         dict: A dictionary containing information about the specified package, such as name, version, description, author, license, and more.
 
     Example usage:
-    >>> api = API()
+    >>> from MukeshAPI import api
     >>> package_info = api.pypi("requests")
     >>> print(package_info)
     """
@@ -444,7 +602,7 @@ class MukeshAPI:
         dict: A dictionary containing search results of GitHub repositories. Each entry includes an index and corresponding repository.
 
     Example usage:
-    >>> api = API()
+    >>> from MukeshAPI import api
     >>> search_results = api.repo("MukeshRobot")
     >>> print(search_results)
     """
@@ -469,7 +627,7 @@ class MukeshAPI:
         dict: A dictionary containing search results of GitHub username .
 
     Example usage:
-    >>> api = API()
+    >>> from MukeshAPI import api
     >>> search_results = api.github("noob-mukesh")
     >>> print(search_results)
     """
@@ -516,7 +674,7 @@ class MukeshAPI:
         dict: A dictionary containing search results of meme
         
         Example usage:
-        >>> api = API()
+        >>> from MukeshAPI import api
         >>> search_results = api.meme()
         >>> print(search_results)
         """
