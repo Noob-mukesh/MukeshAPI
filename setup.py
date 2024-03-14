@@ -19,7 +19,7 @@ setup(
     version=version(),
     author="Mukesh | noob-mukesh",
     author_email="itzcodermukesh@gmail.com",
-    description="python api hub |mukesh-api",
+    description="python api hub | MukeshAPI",
     long_description_content_type="text/markdown",
     long_description=long_desc,
     packages=find_packages(),

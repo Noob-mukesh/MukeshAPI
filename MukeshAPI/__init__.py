@@ -6,9 +6,9 @@ from bs4 import BeautifulSoup
 from requests_html import HTMLSession
 import urllib
 from .func import MORSE_CODE_DICT
-from . import AI
+from .import AI
 
-__version__ = "0.6.2.1"
+__version__ = "0.6.2.3"
 
 __all__ = ["api","AI"]
 
