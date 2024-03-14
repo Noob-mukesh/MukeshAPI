@@ -1,11 +1,11 @@
 from .. import MukeshAPI
 import requests
-import json
+import json,types
 import urllib
 from base64 import b64decode as m
 from ..func import (payloads_response,gpt_4_mode,payload8)
 
-def chatgpt(self,args,mode:str=False):
+def chatgpt(self,args:str,mode:str=False):
        
         """
         Sends a query to a specified chatgpt API endpoint to retrieve a response based on the provided question.
@@ -46,4 +46,4 @@ def chatgpt(self,args,mode:str=False):
             except Exception as e:
                 return e
         
-MukeshAPI.chatgpt=chatgpt
+MukeshAPI.chatgpt=types.MethodType(chatgpt, MukeshAPI, None)

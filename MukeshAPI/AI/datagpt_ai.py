@@ -4,7 +4,7 @@ import json
 import re
 from base64 import b64decode as m
 
-def datagpt(self,args):
+def datagpt(self,args:str):
         """
         Sends a query to a specified datagpt API endpoint to retrieve a response based on the provided question.
 
