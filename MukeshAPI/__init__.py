@@ -16,11 +16,11 @@ __all__ = ["api"]
 class MukeshAPI:
     
     def __init__(self)->None:
-        """Api for various purpose
+        print("""
+    Api for various purpose
     support group : https://t.me/the_support_chat
     owner : @mr_sukkun
-        """
-        pass
+        """)
     
     def datagpt(self,args:str):
         """
@@ -686,5 +686,7 @@ class MukeshAPI:
         results = {"title": title, "url": url}
         return results
     
-
-api=MukeshAPI()
+    @staticmethod
+    def weather(city:string):
+        api=requests.get(f"https://weatherxapi.deno.dev/weather?city={city}")
+        return api.json()
