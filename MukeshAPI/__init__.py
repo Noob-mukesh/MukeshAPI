@@ -687,6 +687,6 @@ class MukeshAPI:
         return results
     
     @staticmethod
-    def weather(city:string):
+    def weather(city:str):
         api=requests.get(f"https://weatherxapi.deno.dev/weather?city={city}")
         return api.json()
