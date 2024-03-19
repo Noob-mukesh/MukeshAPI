@@ -3,9 +3,8 @@
 ## Chatgpt AI 🤖
 
 ```
-from MukeshAPI import MukeshAPI
+from MukeshAPI import api
 
-api = MukeshAPI()
 # Execute Chatgpt AI with the input text
 
 response = api.chatgpt("Write simple basic html website")
@@ -25,9 +24,8 @@ print(response)
 ## Chatbot AI 🤖
 
 ```
-from MukeshAPI import MukeshAPI
+from MukeshAPI import api
 
-api = MukeshAPI()
 # Execute Chatbot AI with the input text
 
 print(api.chatbot("hii"))
@@ -36,9 +34,8 @@ print(api.chatbot("hii"))
 ## Blackbox AI 🤖
 
 ```
-from MukeshAPI import MukeshAPI
+from MukeshAPI import api
 
-api = MukeshAPI()
 # Execute blackbox AI with the input text
 
 print(api.blackbox("write flask app code"))
@@ -47,9 +44,8 @@ print(api.blackbox("write flask app code"))
 ## Password Generator 💡
 
 ```
-from MukeshAPI import MukeshAPI
+from MukeshAPI import api
 
-api = MukeshAPI()
 # Generate a default length password
 print(api.password())
 
@@ -60,9 +56,8 @@ print(api.password(10))
 ## Gemini AI 🤖
 
 ```
-from MukeshAPI import MukeshAPI
+from MukeshAPI import api
 
-api = MukeshAPI()
 # Execute Gemini AI with the input text
 
 print(api.gemini("write flask app code"))
@@ -71,9 +66,8 @@ print(api.gemini("write flask app code"))
 ## Datagpt AI 🤖
 
 ```
-from MukeshAPI import MukeshAPI
+from MukeshAPI import api
 
-api = MukeshAPI()
 # Execute datagpt AI with the input text
 response = api.datagpt("what is data science")
 print(response)
@@ -82,9 +76,7 @@ print(response)
 ## BhagwatGita
 
 ```
-from MukeshAPI import MukeshAPI
-
-api = MukeshAPI()
+from MukeshAPI import api
 verse_data = api.bhagwatgita(1, 5)
 print(verse_data)
 ```
@@ -92,9 +84,9 @@ print(verse_data)
 ## IMDB Search
 
 ```
-from MukeshAPI import MukeshAPI
+from MukeshAPI import api
 
-api = MukeshAPI()
+
 movie_data = api.imdb("The Godfather")
 
 print(movie_data)
@@ -103,9 +95,8 @@ print(movie_data)
 ## Morse Decode
 
 ```
-from MukeshAPI import MukeshAPI
+from MukeshAPI import api
 
-api = MukeshAPI()
 decoded_result =api.morse_decode(".... . .-.. .-.. --- / .-- --- .-. .-.. -..")
 
 print(decoded_result)
@@ -114,9 +105,7 @@ print(decoded_result)
 ## Morse Encode
 
 ```
-from MukeshAPI import MukeshAPI
-
-api = MukeshAPI()
+from MukeshAPI import api
 encoded_result =api.morse_encode("enter text here")
 print(encoded_result)
 ```
@@ -124,9 +113,7 @@ print(encoded_result)
 ## Hastag Generator
 
 ```
-from MukeshAPI import MukeshAPI
-
-api = MukeshAPI()
+from MukeshAPI import api
 keyword = "python"
 hashtags = api.hashtag(keyword)
 print(hashtags)
@@ -135,9 +122,7 @@ print(hashtags)
 ## Unsplash Image Search
 
 ```
-from MukeshAPI import MukeshAPI
-
-api = MukeshAPI()
+from MukeshAPI import api
 response = api.unsplash("boy image")
 print(response)
 
@@ -146,9 +131,7 @@ print(response)
 ## LeetCode Information
 
 ```
-from MukeshAPI import MukeshAPI
-
-api = MukeshAPI()
+from MukeshAPI import api
 
 user_data = api.leetcode("noob-mukesh")
 print(user_data)
@@ -157,9 +140,7 @@ print(user_data)
 ## Pypi Info
 
 ```
-from MukeshAPI import MukeshAPI
-
-api = MukeshAPI()
+from MukeshAPI import api
 user_data = api.pypi("mukeshapi")
 print(user_data)
 ```
@@ -167,9 +148,7 @@ print(user_data)
 ## Github Profile Information
 
 ```
-from MukeshAPI import MukeshAPI
-
-api = MukeshAPI()
+from MukeshAPI import api
 search_results = api.github("noob-mukesh")
 print(search_results)
 ```
@@ -177,9 +156,7 @@ print(search_results)
 ## Github Repo Search
 
 ```
-from MukeshAPI import MukeshAPI
-
-api = MukeshAPI()
+from MukeshAPI import api
 search_results = api.repo("mukeshrobot")
 print(search_results)
 ```
@@ -187,9 +164,7 @@ print(search_results)
 ## Random Meme
 
 ```
-from MukeshAPI import MukeshAPI
-
-api = MukeshAPI()
+from MukeshAPI import api
 search_results = api.meme()
 print(search_results)
 ```
