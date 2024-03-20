@@ -774,4 +774,3 @@ class MukeshAPI:
     
 
 api=MukeshAPI()
-print(api.weather("bihar"))
