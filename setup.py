@@ -26,7 +26,7 @@ setup(
     license="MIT",
     url="https://github.com/noob-mukesh/MukeshAPI",
     download_url="https://github.com/Noob-mukesh/MukeshAPI/blob/main/README.md",
-    install_requires=["pytz>=2023.3","requests-html"],
+    install_requires=["pytz>=2023.3","requests-html","pillow"],
     keywords=['python', "MukeshAPI","flask"],
     classifiers=[
         "Development Status :: 5 - Production/Stable",

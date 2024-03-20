@@ -1,14 +1,15 @@
 import random
 import requests
-import string,re
+import string,re,os
 import base64,json
 from bs4 import BeautifulSoup
 from requests_html import HTMLSession
 import urllib
-from .func import (MORSE_CODE_DICT,payloads_response,gpt_4_mode,payload8)
-from base64 import b64decode as m
-
-__version__ = "0.6.2.4"
+from MukeshAPI.func import (MORSE_CODE_DICT,payloads_response,gpt_4_mode,payload8)
+from base64 import b64decode as m,b64encode as n
+from MukeshAPI.words import wordshub
+from PIL import Image, ImageDraw, ImageFont
+__version__ = "0.6.5.4"
 
 __all__ = ["api"]
 
@@ -22,7 +23,8 @@ class MukeshAPI:
         """
         pass
     
-    def datagpt(self,args:str):
+    @staticmethod
+    def datagpt(args:str):
         """
         Sends a query to a specified datagpt API endpoint to retrieve a response based on the provided question.
 
@@ -57,8 +59,35 @@ class MukeshAPI:
         except Exception as e:
             return e   
     
+    @staticmethod
+    def blackpink(args):
+        """generate blackpink  image from text
+    """
+        text = args
+        font_path = os.path.dirname(__file__)+"blackpink.otf"
+        font_size = 230
+        font = ImageFont.truetype(font_path, font_size)
+        fontsize = int(font.getlength(text))
+        img = Image.new("RGB", (fontsize + 100, font_size + 100), color=(0, 0, 0))
+        draw = ImageDraw.Draw(img)
+        draw.text(
+            ((img.width - fontsize) / 2, 0),
+            text,
+            fill=(255, 148, 224),
+            font=font,
+            align="center",
+        )
+        draw.rectangle([0, 0, img.width, img.height], outline="#ff94e0", width=20)
+        img2 = Image.new("RGB", (fontsize + 800, font_size + 300), color=(0, 0, 0))
+        img2.paste(img, (350, 100))
 
-    def blackbox(self,args: str) -> requests.Response:
+        buffered = io.BytesIO()
+        img2.save(buffered, format="JPEG")
+        img_str = n(buffered.getvalue()).decode("utf-8")
+        return img_str
+    
+    @staticmethod
+    def blackbox(args: str) -> requests.Response:
         """
         Interact with the Blackbox AI API for generating content. 🧠
 
@@ -102,7 +131,7 @@ class MukeshAPI:
         headers = {
             'Content-Type': 'application/json',
             'Cookie': 'sessionId=f77a91e1-cbe1-47d0-b138-c2e23eeb5dcf; intercom-id-jlmqxicb=4cf07dd8-742e-4e3f-81de-38669816d300; intercom-device-id-jlmqxicb=1eafaacb-f18d-402a-8255-b763cf390df6; intercom-session-jlmqxicb=',
-            'Origin': 'https://www.blackbox.ai',
+            'Origin': m('aHR0cHM6Ly93d3cuYmxhY2tib3guYWk=').decode("utf-8"),
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36'
         }
         try:
@@ -111,7 +140,9 @@ class MukeshAPI:
                 return {"results": response.text, "join": "@Mr_Sukkun", "success": True}
         except Exception as e:
             return e  
-    def chatgpt(self,args:str,mode:str=False):
+    
+    @staticmethod
+    def chatgpt(args:str,mode:str=False):
        
         """
         Sends a query to a specified chatgpt API endpoint to retrieve a response based on the provided question.
@@ -131,27 +162,26 @@ class MukeshAPI:
         >>> print(response)
         """
         if not mode:
-            try:
-                session = requests.Session()
-                response_data=payloads_response(payloads=payload8,args=args)
-                url = "https://api.exh.ai/chatbot/v1/get_response"
-                headers = {
-                "Authorization": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6ImJvdGlmeS13ZWItdjMifQ.O-w89I5aX2OE_i4k6jdHZJEDWECSUfOb1lr9UdVH4oTPMkFGUNm9BNzoQjcXOu8NEiIXq64-481hnenHdUrXfg",
-                "Content-Type": "application/json",
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
-            }
-                response = session.post(url, headers=headers, data=json.dumps(response_data))
-                return {"results":response.json()["response"],"join": "@Mr_Sukkun", "success": True}
-            except Exception as e:
-                return e
+            session = requests.Session()
+            response_data=payloads_response(payloads=payload8,args=args)
+            url = m("aHR0cHM6Ly9hcGkuZXhoLmFpL2NoYXRib3QvdjEvZ2V0X3Jlc3BvbnNl").decode("utf-8")
+            headers = {
+            "Authorization": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6ImJvdGlmeS13ZWItdjMifQ.O-w89I5aX2OE_i4k6jdHZJEDWECSUfOb1lr9UdVH4oTPMkFGUNm9BNzoQjcXOu8NEiIXq64-481hnenHdUrXfg",
+            "Content-Type": "application/json",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
+        }
+            response = session.post(url, headers=headers, data=json.dumps(response_data))
+            return {"results":response.json()["response"],"join": "@Mr_Sukkun", "success": True}
         else:
             try:
                 result = gpt_4_mode(args, mode)
                 return {"results":result,"join": "@Mr_Sukkun", "success": True}
                 
             except Exception as e:
-                return e      
-    def password(self, num: int = 12)-> str:
+                return e  
+       
+    @staticmethod 
+    def password(num: int = 12)-> str:
         """
         This function generates a random password by combining uppercase letters, lowercase letters, punctuation marks, and digits.
 
@@ -171,7 +201,26 @@ class MukeshAPI:
         characters = string.ascii_letters + string.punctuation + string.digits
         password = "".join(random.sample(characters, num))
         return password
-    def gemini(self, args: str) -> dict:
+    
+    @staticmethod
+    def randomword():
+        """
+        Generate random word . ✨
+
+        Returns:
+            : A random word from json file.
+
+        Example usage:
+        >>> from MukeshAPI import api
+        >>> word = api.randomword()
+        >>> print(word)
+        """
+        
+        word = random.choice(wordshub)
+        return {"results": word, "join": "@Mr_Sukkun", "sucess": True}
+    
+    @staticmethod
+    def gemini(args: str) -> dict:
         """
         Generate content using the Gemini API. ✨
 
@@ -201,8 +250,9 @@ class MukeshAPI:
                 return {"results":generated_text,"join": "@Mr_Sukkun", "success": True}
         except Exception as e:
             return e
-
-    def hashtag(self, arg: str)-> list:
+    
+    @staticmethod
+    def hashtag(arg: str)-> list:
         """
         Generate hashtags based on the given keyword using a specific website.
         
@@ -218,13 +268,15 @@ class MukeshAPI:
         >>> hashtags = api.hashtag(keyword)
         >>> print(hashtags)
         """
-        url = base64.b64decode("aHR0cHM6Ly9hbGwtaGFzaHRhZy5jb20vbGlicmFyeS9jb250ZW50cy9hamF4X2dlbmVyYXRvci5waHA=").decode("utf-8")
+        url = m("aHR0cHM6Ly9hbGwtaGFzaHRhZy5jb20vbGlicmFyeS9jb250ZW50cy9hamF4X2dlbmVyYXRvci5waHA=").decode("utf-8")
         data = {"keyword": arg, "filter": "top"}
         response = requests.post(url, data=data).text
         content = BeautifulSoup(response, "html.parser").find("div", {"class": "copy-hashtags"}).string
         output=content.split()
         return output
-    def chatbot(self,args:str)->str:
+    
+    @staticmethod
+    def chatbot(args:str)->str:
         """
         Interact with a chatbot to get a response based on the provided input text.
 
@@ -244,8 +296,10 @@ class MukeshAPI:
         full_url = f"{x}{args}"
         response = requests.get(full_url).json()["reply"]
         return response
-
-    def bhagwatgita(self,chapter: int, shalok: int = 1) -> requests.Response:
+    
+    
+    @staticmethod
+    def bhagwatgita(chapter: int, shalok: int = 1) -> requests.Response:
         """
         Retrieve a verse from the Bhagavad Gita based on the provided chapter and shalok number.
 
@@ -278,8 +332,9 @@ class MukeshAPI:
 
         return data
 
-
-    def imdb(self,args: str) -> dict:
+    
+    @staticmethod
+    def imdb(args: str) -> dict:
         """
         Retrieve information about a movie or TV show from IMDb based on the search query.
 
@@ -362,7 +417,9 @@ class MukeshAPI:
                     return {"results": output}
                 except:
                     return {"Success": False}
-    def morse_encode(self,args:str)->str:
+    
+    @staticmethod
+    def morse_encode(args:str)->str:
         """
     Encode the input string into Morse code.
 
@@ -392,7 +449,8 @@ class MukeshAPI:
         }
         return (output)
     
-    def morse_decode(self,args: str) -> str:
+    @staticmethod
+    def morse_decode(args: str) -> str:
         """
     Decode the Morse code back into the original text. 🔄
 
@@ -431,7 +489,8 @@ class MukeshAPI:
         return output
        
     
-    def unsplash(self,args)->requests.Response:
+    @staticmethod
+    def unsplash(args)->requests.Response:
         """
     Get image URLs related to the query using the iStockphoto API.
 
@@ -464,8 +523,9 @@ class MukeshAPI:
             return {"results": image_urls, "join": "@Mr_Sukkun", "success": True}
         else:
             return {f"status code: {response.status_code}"}
-        
-    def leetcode(self,username):
+      
+    @staticmethod  
+    def leetcode(username):
         """
     Retrieve user data including activity streak, profile information, and contest badges from LeetCode using GraphQL API.
 
@@ -570,7 +630,8 @@ class MukeshAPI:
             return e
         
     
-    def pypi(self,args):
+    @staticmethod
+    def pypi(args):
         """
     Retrieve package information from the Python Package Index (PyPI) by providing the package name.
 
@@ -591,7 +652,8 @@ class MukeshAPI:
         return result
     
     
-    def repo(self,args):
+    @staticmethod
+    def repo(args):
         """
     Search GitHub repositories based on the search query provided.
 
@@ -616,7 +678,9 @@ class MukeshAPI:
             result.append((index, item))
 
         return {"results": result, "join": "@Mr_Sukkun", "sucess": True}
-    def github(self,args):
+    
+    @staticmethod
+    def github(args):
         """
     Search GitHub information based on the username query provided.
 
@@ -666,7 +730,9 @@ class MukeshAPI:
             "following": following,
         }
         return results
-    def meme(self):
+    
+    @staticmethod
+    def meme():
         """ Fetch  random memes from reddit
         
         Returns:
@@ -686,5 +752,26 @@ class MukeshAPI:
         results = {"title": title, "url": url}
         return results
     
+    @staticmethod
+    def weather(city: str):
+        """
+        Retrieves weather data for a specified city using a remote weather API.
+
+        Args:
+            city (str): The name of the city for which weather data is requested.
+
+        Returns:
+            dict: JSON response containing weather data for the specified city.
+
+        Example usage:
+        >>> from MukeshAPI import api
+        >>> weather_data = api.weather("Bihar")
+        >>> print(weather_data)
+        """
+        url=m("aHR0cHM6Ly93ZWF0aGVyeGFwaS5kZW5vLmRldi93ZWF0aGVyP2NpdHk9").decode("utf-8")
+        results=requests.get(f"{url}{city}")
+        return results.json() 
+    
 
 api=MukeshAPI()
+print(api.weather("bihar"))
