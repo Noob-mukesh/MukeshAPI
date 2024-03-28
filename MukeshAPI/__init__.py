@@ -9,7 +9,8 @@ from MukeshAPI.func import (MORSE_CODE_DICT,payloads_response,gpt_4_mode,payload
 from base64 import b64decode as m,b64encode as n
 from MukeshAPI.words import wordshub
 from PIL import Image, ImageDraw, ImageFont
-__version__ = "0.6.5.4"
+from MukeshAPI.truth_dare import TRUTH,DARE
+__version__ = "0.6.5.5"
 
 __all__ = ["api"]
 
@@ -771,6 +772,48 @@ class MukeshAPI:
         url=m("aHR0cHM6Ly93ZWF0aGVyeGFwaS5kZW5vLmRldi93ZWF0aGVyP2NpdHk9").decode("utf-8")
         results=requests.get(f"{url}{city}")
         return results.json() 
+    import requests
+
+    @staticmethod
+    def upload_image(image_url=None, image_file=None):
+        """Uploads an image to ImgBB and returns the URL of the uploaded image.
+
+    Args:
+        image_url (str, optional): The URL of the image to upload.
+        image_file (file, optional): The file object of the image to upload.
+
+    Returns:
+        str: The URL of the uploaded image.
+    """
+
+        if image_url is None and image_file is None:
+            raise ValueError("Either image_url or image_file must be provided.")
+
+        if image_url is not None:
+            image =image_url
+        else:
+            image = base64.b64encode(image_file.read())
+
+        payload = {'key': "b90a7d977b2aa510ef101de4f4b1876d", 'image': image}
+
+        response = requests.post("https://api.imgbb.com/1/upload", data=payload)
+
+        return response.json()
+    
+    @staticmethod
+    def truth():
+        truth_string=random.choice(TRUTH)
+        return truth_string
+    
+    @staticmethod
+    def dare():
+        dare_string=random.choice(DARE)
+        return truth_string
+        
+
+
+
     
 
 api=MukeshAPI()
+
