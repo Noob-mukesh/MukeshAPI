@@ -1,16 +1,18 @@
 import random
 import requests
 import string,re,os
-import base64,json
+import base64,json,time
 from bs4 import BeautifulSoup
-from requests_html import HTMLSession
+from urllib.request import urlopen
+from bs4 import BeautifulSoup
 import urllib
+from requests_html import HTMLSession
 from MukeshAPI.func import (MORSE_CODE_DICT,payloads_response,gpt_4_mode,payload8)
 from base64 import b64decode as m,b64encode as n
 from MukeshAPI.words import wordshub
 from PIL import Image, ImageDraw, ImageFont
 from MukeshAPI.truth_dare import TRUTH,DARE
-__version__ = "0.6.5.5"
+__version__ = "0.6.5.6"
 
 __all__ = ["api"]
 
@@ -152,7 +154,7 @@ class MukeshAPI:
         Args:
             args (str): The question or input for the chatgpt.
             mode(str) : this  parameter is used to select different models of Chatgpt
-                        available modes are "girlfriend","anime","animev2","flirt","santa","elonmusk"
+                        available modes are "girlfriend","anime","animev2","flirt","santa","elonmusk","wormgpt"
 
         Returns:
             str: The response text from the chatgpt API.
@@ -772,7 +774,6 @@ class MukeshAPI:
         url=m("aHR0cHM6Ly93ZWF0aGVyeGFwaS5kZW5vLmRldi93ZWF0aGVyP2NpdHk9").decode("utf-8")
         results=requests.get(f"{url}{city}")
         return results.json() 
-    import requests
 
     @staticmethod
     def upload_image(image_url=None, image_file=None):
@@ -784,6 +785,11 @@ class MukeshAPI:
 
     Returns:
         str: The URL of the uploaded image.
+        
+    Example usage:
+        >>> from MukeshAPI import api
+        >>> upload_image = api.upload_image(image_url="url-of-img.jpg")
+        >>> print(upload_image)
     """
 
         if image_url is None and image_file is None:
@@ -808,12 +814,46 @@ class MukeshAPI:
     @staticmethod
     def dare():
         dare_string=random.choice(DARE)
-        return truth_string
-        
-
-
-
+        return dare_string
     
+    @staticmethod
+    def ai_image(prompt: str) -> bytes:
+        """Generates an AI-generated image based on the provided prompt.
 
+        Args:
+            prompt (str): The input prompt for generating the image.
+
+        Returns:
+            bytes: The generated image in bytes format.
+            
+        Example usage:
+        >>> from MukeshAPI import api
+        >>> generated_image= api.ai_image("boy image")
+        >>> print(generated_image)
+        """
+        url = base64.b64decode('aHR0cHM6Ly9haS1hcGkubWFnaWNzdHVkaW8uY29tL2FwaS9haS1hcnQtZ2VuZXJhdG9y').decode("utf-8")
+
+        form_data = {
+            'prompt': prompt,
+            'output_format': 'bytes',
+            'request_timestamp': str(int(time.time())),
+            'user_is_subscribed': 'false',
+        }
+
+        response = requests.post(url, data=form_data)
+        if response.status_code == 200:
+            try:
+                if response.content:
+                    return response.content
+                else:
+                    raise Exception("Failed to get image from the server.")
+            except Exception as e:
+                raise e
+        else:
+            raise Exception("Error:", response.status_code)
+
+        
+            
 api=MukeshAPI()
 
+print(api.chatgpt("write code to scrap data from instagram",mode="wormgpt"))

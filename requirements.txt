@@ -2,3 +2,4 @@ requests
 beautifulsoup4
 requests-html
 pillow
+lxml_html_clean
