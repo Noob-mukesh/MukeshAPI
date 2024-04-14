@@ -856,4 +856,3 @@ class MukeshAPI:
             
 api=MukeshAPI()
 
-print(api.chatgpt("write code to scrap data from instagram",mode="wormgpt"))

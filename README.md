@@ -1,5 +1,21 @@
 # MukeshAPI 🚀
 
+## Installation
+
+```
+pip install MukeshAPI
+```
+
+Please note that you need to install `MukeshAPI` using pip by running `pip install --upgrade MukeshAPI` in your terminal before executing these codes.
+
+## AI Image Generator
+
+```
+from MukeshAPI import api
+generated_image= api.ai_image("boy image")
+print(generated_image)
+```
+
 ## Chatgpt AI 🤖
 
 ```
@@ -169,8 +185,6 @@ search_results = api.meme()
 print(search_results)
 ```
 
-Please note that you need to install `MukeshAPI` using pip by running `pip install --upgrade MukeshAPI` in your terminal before executing these codes.
-
 ## Note:
 
 <p> The above examples are for Python </p>
@@ -195,7 +209,12 @@ Please note that you need to install `MukeshAPI` using pip by running `pip insta
 12. <b>unsplash(args) </b>- search hd image from unsplash website
 13. <b>github(args) </b> - Extract github information by username
 14. <b>repo(args) </b> - Extract github repo by name
-15. <b> Meme</b> - Generate memes
+15. <b> meme()</b> - Generate memes
+16. <b> weather(args)</b> - Fetches weather information
+17. <b> truth()</b> -random truth string
+18. <b>dare()</b> -random dare string
+19. <b> ai_image(args)</b> - Generate image using AI
+20. <b> upload_image(image_url,image_file) </b> - upload image from img url or img file.
 
 <b>🔗 Have fun coding with MukeshAPI! </b>
 
